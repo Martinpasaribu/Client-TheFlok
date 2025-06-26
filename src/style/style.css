@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+/* Corner Ribon */
+
+.thumb-container{
+    position:relative;
+    overflow:hidden;
+    width: 175px;
+    height: 131px;
+    padding: 1px 1px 0 0;
+    margin: 0;
+  }
+  
+  .corner-ribbon{
+    width: 80px;
+    font-family: 'PT Sans', sans-serif;
+    font-size:1em;
+    text-align: center;
+    line-height: 25px;
+    letter-spacing: 2px;
+    color: #f0f0f0;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+  .corner-ribbon.shadow{
+    box-shadow: 0 0 3px rgba(0,0,0,.3);
+  }
+  .corner-ribbon.top-right{
+    top: 14px;
+    right: -70px;
+    left: auto;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+  /* Colors */
+  .corner-ribbon.red{background: #9c2b21;}
+  .corner-ribbon.blue{background: #5c8288;}
+  
+
+  .switcher {
+    display: none;
+  }
+  

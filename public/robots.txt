@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://adhisthanavillas.com
+
+# Sitemaps
+Sitemap: https://adhisthanavillas.com/sitemap.xml

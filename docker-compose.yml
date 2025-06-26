@@ -1,0 +1,69 @@
+version: '3.8'
+
+networks:
+  adhisthana_network:
+    driver: bridge
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-adhisthana
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt/live/adhisthanavillas.com/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - /etc/letsencrypt/live/adhisthanavillas.com/privkey.pem:/etc/ssl/private/privkey.pem
+    depends_on:
+      client:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+    networks:
+      - adhisthana_network
+
+  client:
+    container_name: client-adhisthana
+    build:
+      context: ./client-adhisthana
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client-adhisthana:/app
+      - /app/node_modules
+      - ./client-adhisthana/.env:/app/.env
+    depends_on:
+      - server
+    restart: unless-stopped
+    networks:
+      - adhisthana_network
+    command: sh -c "npm install && npm run build && npm run start"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  server:
+    container_name: server-adhisthana
+    build:
+      context: ./server-adhisthana
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server-adhisthana:/app
+      - /app/node_modules
+      - ./server-adhisthana/.env:/app/.env
+    restart: unless-stopped
+    networks:
+      - adhisthana_network
+    command: sh -c "npm install && npm run start"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
